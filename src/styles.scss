@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  background-color: #f8fafc;
+}
+
+@import "../node_modules/primeflex/primeflex.css";
+@import "../node_modules/primeicons/primeicons.css"

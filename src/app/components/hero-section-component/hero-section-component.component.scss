@@ -1,0 +1,49 @@
+.hero {
+  background-image: linear-gradient(to bottom, #f0f0fb, #f1f0fc, #edeefb, #e9edfa, #e9ecf9, #e7ebf9, #e5eaf8, #e4e9f7);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  padding: 40px;
+  text-align: center;
+  
+}
+
+.hero h1  {
+  display: flex;
+  flex-direction:column;
+  padding-top: 10px;
+  line-height: 1;  
+  font-size: 60px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  max-width: 700px;
+  margin-left:25%;
+}
+  
+.buttons{
+  display: flex;
+  justify-content: center; 
+  gap: 20px; 
+}
+
+span{
+  background-image: linear-gradient(to right, #c0511a, #030a44, #d85ab8, #e7dc67, #a394ff);
+  background-clip: text;
+  color: transparent;
+}
+  
+i{
+  margin-top: 50px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* Ajustez la distance du mouvement */
+  }
+}

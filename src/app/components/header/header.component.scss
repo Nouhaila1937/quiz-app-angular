@@ -1,0 +1,17 @@
+.login ::ng-deep .p-button {
+  border: none !important; 
+  background-color: #0c45ca !important;
+  color: aliceblue;
+}
+.login:hover ::ng-deep .p-button {
+  border: none !important; 
+  background-color: #0cca2f !important;
+  color: aliceblue;
+}
+.job-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+  margin-top: 0.8rem;
+}
+ 

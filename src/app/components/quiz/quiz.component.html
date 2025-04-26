@@ -1,0 +1,31 @@
+<div class="quiz-container">
+  <h2>Quiz {{ selectedCategory }}</h2>
+
+  <div>
+    <label for="category">Catégorie :</label>
+    <select id="category" [(ngModel)]="selectedCategory" (change)="loadQuestions()">
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="numQuestions">Nombre de questions :</label>
+    <input type="number" id="numQuestions" [(ngModel)]="numQuestions" min="1" max="10" (change)="loadQuestions()">
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+    <div *ngFor="let question of questions; let i = index">
+      <fieldset>
+        <legend>{{ question.question }}</legend>
+        <div *ngFor="let option of ['a', 'b', 'c', 'd', 'e', 'f']">
+          <label>
+            <input type="radio" name="q{{ i }}" [(ngModel)]="answers[i]" [value]="'answer_' + option">
+            {{ question.answers['answer_' + option] }}
+          </label>
+        </div>
+      </fieldset>
+    </div>
+
+    <button type="submit">Soumettre</button>
+  </form>
+</div>

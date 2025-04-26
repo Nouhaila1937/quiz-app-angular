@@ -1,0 +1,24 @@
+.footer-end {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+}
+
+
+.copyright {
+  margin-right: 100px;
+}
+.job-title{
+  margin-right: 0%;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+  margin-top: 0.8rem;
+}
