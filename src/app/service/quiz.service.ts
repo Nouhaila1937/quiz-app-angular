@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 
 export interface Answer {
-  answer_a: string;
-  answer_b: string;
-  answer_c: string;
-  answer_d: string;
-  [key: string]: string;
+  answer_a: string | null;
+  answer_b: string | null;
+  answer_c: string | null;
+  answer_d: string | null;
+  answer_e: string | null;
+  answer_f: string | null;
+  [key: string]: string | null;
 }
 
 export interface Question {
@@ -17,9 +19,13 @@ export interface Question {
   category: string;
   answers: Answer;
   correct_answers: { [key: string]: string };
-  explanation: string;
+  multiple_correct_answers: string;
+  correct_answer: string | null;
+  explanation: string | null;
+  tip: string | null;
+  description: string | null;
   difficulty: string;
-  tags: string[];
+  tags: { name: string }[];
 }
 
 @Injectable({
@@ -42,7 +48,15 @@ export class QuizService {
           console.log('API Response:', response);
         }),
         catchError(error => {
+          // Log plus détaillé de l'erreur
           console.error('Error fetching questions:', error);
+          if (error.error instanceof ErrorEvent) {
+            // Erreur client-side
+            console.error('Client-side error:', error.error.message);
+          } else {
+            // Erreur server-side
+            console.error(`Server returned code: ${error.status}, body: ${JSON.stringify(error.error)}`);
+          }
           return throwError(() => new Error('Erreur lors du chargement des questions'));
         })
       );

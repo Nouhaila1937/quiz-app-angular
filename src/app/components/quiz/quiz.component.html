@@ -1,4 +1,5 @@
 <div class="quiz-container"> 
+  <app-header></app-header>
   
   <div class="quiz-content">
     <p-card styleClass="mb-4">
@@ -30,16 +31,6 @@
       
       <div *ngIf="error" class="p-3 text-red-500">
         {{ error }}
-        <div *ngIf="responseData">
-          <p>Données reçues (pour débug):</p>
-          <pre>{{ responseData | json }}</pre>
-        </div>
-      </div>
-      
-      <!-- Debug info -->
-      <div *ngIf="questions.length === 0 && !loading && !error" class="p-3">
-        <p>Aucune question n'a été chargée. Contenu de la réponse:</p>
-        <pre>{{ responseData | json }}</pre>
       </div>
       
       <form (ngSubmit)="onSubmit()" *ngIf="!loading && questions.length > 0">
@@ -47,11 +38,15 @@
           <p-card styleClass="question-card">
             <h3>{{ i+1 }}. {{ question.question }}</h3>
             
-            <div class="options-list" *ngIf="question.answers">
-              <div *ngFor="let option of getObjectKeys(question.answers)" class="p-field-radiobutton">
-                <p-radioButton [inputId]="option+'_'+i" name="q{{i}}" 
-                  [value]="option" [(ngModel)]="answers[i]"></p-radioButton>
-                <label [for]="option+'_'+i">{{ question.answers[option] }}</label>
+            <div *ngIf="question.description" class="question-description mb-2">
+              {{ question.description }}
+            </div>
+            
+            <div class="options-list">
+              <div *ngFor="let key of getObjectKeys(question.answers)" class="p-field-radiobutton">
+                <p-radioButton [inputId]="key+'_'+i" [name]="'q'+i" 
+                  [value]="key" [(ngModel)]="answers[i]"></p-radioButton>
+                <label [for]="key+'_'+i">{{ question.answers[key] }}</label>
               </div>
             </div>
           </p-card>
@@ -63,5 +58,6 @@
       </form>
     </p-card>
   </div>
-   
+  
+  <app-footer></app-footer>
 </div>

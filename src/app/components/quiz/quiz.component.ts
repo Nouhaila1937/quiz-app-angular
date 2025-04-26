@@ -20,7 +20,9 @@ import { FooterComponent } from '../../components/footer/footer.component';
     ButtonModule,
     CardModule,
     DropdownModule,
-    InputNumberModule 
+    InputNumberModule,
+    HeaderComponent,
+    FooterComponent
   ],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.scss'
@@ -28,7 +30,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
 export class QuizComponent implements OnInit {
   categories = [  
     "Linux", "BASH", "PHP", "Docker", "HTML", "Postgres", "MySQL",
-    "Laravel", "Kubernetes", "JavaScript", "Python", "Openshift",
+    "Laravel", "Kubernetes", "JavaScript", "Openshift",
     "Terraform", "React", "Django", "cPanel", "Ubuntu", "nodeJS",
     "WordPress", "Next.js", "VueJS", "Apache Kafka"
   ];
@@ -56,24 +58,17 @@ export class QuizComponent implements OnInit {
     
     this.quizService.getQuestions(this.selectedCategory, this.numQuestions)
       .subscribe({
-        next: (data: any) => {
+        next: (data: Question[]) => {
           this.responseData = data; // Store the entire response for debugging
           console.log('Response data:', data);
           
-          // Check if the response is an array
-          if (Array.isArray(data)) {
+          if (Array.isArray(data) && data.length > 0) {
             this.questions = data;
             this.answers = Array(this.questions.length).fill('');
-            console.log('Questions parsed:', this.questions);
+            console.log('Questions loaded:', this.questions);
           } else {
-            // If the response is not an array, try to find the questions array
-            if (data.questions && Array.isArray(data.questions)) {
-              this.questions = data.questions;
-              this.answers = Array(this.questions.length).fill('');
-            } else {
-              this.error = "Format de réponse incorrect";
-              console.error('Invalid response format:', data);
-            }
+            this.error = "Aucune question disponible pour cette catégorie";
+            console.error('Empty or invalid response format:', data);
           }
           
           this.loading = false;
@@ -82,27 +77,36 @@ export class QuizComponent implements OnInit {
           this.error = "Impossible de charger les questions. Veuillez réessayer plus tard.";
           console.error('Error details:', err);
           this.loading = false;
-        },
-        complete: () => {
-          this.loading = false;
         }
       });
   }
 
   onSubmit(): void {
     let score = 0;
+    let total = this.questions.length;
+    
     this.questions.forEach((question, index) => {
-      const correctAnswerKey = Object.keys(question.correct_answers || {}).find(key => 
-        question.correct_answers[key] === 'true');
-      if (this.answers[index] === correctAnswerKey) {
-        score++;
+      const selectedAnswer = this.answers[index];
+      
+      if (selectedAnswer && question.correct_answers) {
+        const correctKey = `${selectedAnswer}_correct`;
+        if (question.correct_answers[correctKey] === 'true') {
+          score++;
+        }
       }
     });
-    alert(`Votre score : ${score} / ${this.questions.length}`);
+    
+    alert(`Votre score : ${score} / ${total}`);
   }
   
-  // Helper method to debug data structure
+  // Helper method pour accéder aux propriétés de l'objet answers
   getObjectKeys(obj: any): string[] {
-    return obj ? Object.keys(obj) : [];
+    if (!obj) return [];
+    
+    // Ne prendre que les clés qui ont des valeurs non nulles
+    return Object.keys(obj).filter(key => 
+      obj[key] !== null && 
+      !key.includes('_correct') // Exclure les clés de réponses correctes
+    );
   }
 }
