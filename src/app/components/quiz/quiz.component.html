@@ -1,31 +1,67 @@
-<div class="quiz-container">
-  <h2>Quiz {{ selectedCategory }}</h2>
-
-  <div>
-    <label for="category">Catégorie :</label>
-    <select id="category" [(ngModel)]="selectedCategory" (change)="loadQuestions()">
-      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-    </select>
-  </div>
-
-  <div>
-    <label for="numQuestions">Nombre de questions :</label>
-    <input type="number" id="numQuestions" [(ngModel)]="numQuestions" min="1" max="10" (change)="loadQuestions()">
-  </div>
-
-  <form (ngSubmit)="onSubmit()">
-    <div *ngFor="let question of questions; let i = index">
-      <fieldset>
-        <legend>{{ question.question }}</legend>
-        <div *ngFor="let option of ['a', 'b', 'c', 'd']">
-          <label>
-            <input type="radio" name="q{{ i }}" [(ngModel)]="answers[i]" [value]="'answer_' + option">
-            {{ question.answers['answer_' + option] }}
-          </label>
+<div class="quiz-container"> 
+  
+  <div class="quiz-content">
+    <p-card styleClass="mb-4">
+      <ng-template pTemplate="header">
+        <div class="flex justify-content-between align-items-center p-3">
+          <h2 class="m-0">Quiz {{ selectedCategory }}</h2>
         </div>
-      </fieldset>
-    </div>
-
-    <button type="submit">Soumettre</button>
-  </form>
+      </ng-template>
+      
+      <div class="p-fluid grid">
+        <div class="field col-12 md:col-6">
+          <label for="category">Catégorie</label>
+          <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" 
+            placeholder="Sélectionnez une catégorie" 
+            (onChange)="loadQuestions()" 
+            styleClass="w-full"></p-dropdown>
+        </div>
+        
+        <div class="field col-12 md:col-6">
+          <label for="numQuestions">Nombre de questions</label>
+          <p-inputNumber [(ngModel)]="numQuestions" [min]="1" [max]="10" 
+            (onInput)="loadQuestions()" inputId="numQuestions"></p-inputNumber>
+        </div>
+      </div>
+      
+      <div *ngIf="loading" class="flex justify-content-center p-3">
+        <p>Chargement des questions...</p>
+      </div>
+      
+      <div *ngIf="error" class="p-3 text-red-500">
+        {{ error }}
+        <div *ngIf="responseData">
+          <p>Données reçues (pour débug):</p>
+          <pre>{{ responseData | json }}</pre>
+        </div>
+      </div>
+      
+      <!-- Debug info -->
+      <div *ngIf="questions.length === 0 && !loading && !error" class="p-3">
+        <p>Aucune question n'a été chargée. Contenu de la réponse:</p>
+        <pre>{{ responseData | json }}</pre>
+      </div>
+      
+      <form (ngSubmit)="onSubmit()" *ngIf="!loading && questions.length > 0">
+        <div *ngFor="let question of questions; let i = index" class="mb-4">
+          <p-card styleClass="question-card">
+            <h3>{{ i+1 }}. {{ question.question }}</h3>
+            
+            <div class="options-list" *ngIf="question.answers">
+              <div *ngFor="let option of getObjectKeys(question.answers)" class="p-field-radiobutton">
+                <p-radioButton [inputId]="option+'_'+i" name="q{{i}}" 
+                  [value]="option" [(ngModel)]="answers[i]"></p-radioButton>
+                <label [for]="option+'_'+i">{{ question.answers[option] }}</label>
+              </div>
+            </div>
+          </p-card>
+        </div>
+        
+        <div class="flex justify-content-center mt-4">
+          <p-button type="submit" label="Soumettre" [disabled]="questions.length === 0"></p-button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+   
 </div>

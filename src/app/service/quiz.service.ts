@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-interface Answer {
-  answer_a?: string;
-  answer_b?: string;
-  answer_c?: string;
-  answer_d?: string;
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+
+export interface Answer {
+  answer_a: string;
+  answer_b: string;
+  answer_c: string;
+  answer_d: string;
+  [key: string]: string;
 }
 
-interface Question {
+export interface Question {
   id: number;
   question: string;
   category: string;
@@ -35,11 +37,14 @@ export class QuizService {
 
     return this.http
       .get<Question[]>(this.apiUrl, { params })
-      .pipe(catchError(this.handleError));
-  }
-
-  private handleError(error: any): Observable<never> {
-    console.error('An error occurred:', error);
-    throw error;
+      .pipe(
+        tap(response => {
+          console.log('API Response:', response);
+        }),
+        catchError(error => {
+          console.error('Error fetching questions:', error);
+          return throwError(() => new Error('Erreur lors du chargement des questions'));
+        })
+      );
   }
 }
