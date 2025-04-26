@@ -1,63 +1,88 @@
 <div class="quiz-container"> 
   <app-header></app-header>
-  
+
   <div class="quiz-content">
     <p-card styleClass="mb-4">
       <ng-template pTemplate="header">
-        <div class="flex justify-content-between align-items-center p-3">
-          <h2 class="m-0">Quiz {{ selectedCategory }}</h2>
+        <div class="flex p-3">
+          <h2 class="m-3">Quiz {{ selectedCategory }}</h2>
         </div>
       </ng-template>
-      
-      <div class="p-fluid grid">
-        <div class="field col-12 md:col-6">
-          <label for="category">Catégorie</label>
-          <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" 
-            placeholder="Sélectionnez une catégorie" 
-            (onChange)="loadQuestions()" 
-            styleClass="w-full"></p-dropdown>
-        </div>
-        
-        <div class="field col-12 md:col-6">
-          <label for="numQuestions">Nombre de questions</label>
-          <p-inputNumber [(ngModel)]="numQuestions" [min]="1" [max]="10" 
-            (onInput)="loadQuestions()" inputId="numQuestions"></p-inputNumber>
-        </div>
-      </div>
-      
+
+      <div class="category-question-container">
+  <div class="field">
+    <label for="category">Catégorie</label>
+    <p-dropdown 
+      [options]="categories" 
+      [(ngModel)]="selectedCategory" 
+      placeholder="Sélectionnez une catégorie" 
+      (onChange)="loadQuestions()" 
+      styleClass="w-full">
+    </p-dropdown>
+  </div>
+
+  <div class="field">
+    <label for="numQuestions">Nombre de questions</label>
+    <p-slider 
+      [(ngModel)]="numQuestions" 
+      [min]="1" 
+      [max]="20" 
+      (onSlideEnd)="loadQuestions()">
+    </p-slider>
+    <div class="questions-count">{{ numQuestions }} questions</div>
+  </div>
+</div>
+
+
       <div *ngIf="loading" class="flex justify-content-center p-3">
         <p>Chargement des questions...</p>
       </div>
-      
+
       <div *ngIf="error" class="p-3 text-red-500">
         {{ error }}
       </div>
-      
+
       <form (ngSubmit)="onSubmit()" *ngIf="!loading && questions.length > 0">
         <div *ngFor="let question of questions; let i = index" class="mb-4">
-          <p-card styleClass="question-card">
-            <h3>{{ i+1 }}. {{ question.question }}</h3>
+          <p-card 
+            [ngClass]="{
+              'correct-card': submitted && answers[i] === question.correct_answer,
+              'incorrect-card': submitted && answers[i] !== question.correct_answer
+            }"
+            styleClass="question-card">
             
+            <h3>{{ i+1 }}. {{ question.question }}</h3>
+
             <div *ngIf="question.description" class="question-description mb-2">
               {{ question.description }}
             </div>
-            
+
             <div class="options-list">
               <div *ngFor="let key of getObjectKeys(question.answers)" class="p-field-radiobutton">
                 <p-radioButton [inputId]="key+'_'+i" [name]="'q'+i" 
-                  [value]="key" [(ngModel)]="answers[i]"></p-radioButton>
+                  [value]="key" [(ngModel)]="answers[i]"
+                  [disabled]="submitted"></p-radioButton>
+
                 <label [for]="key+'_'+i">{{ question.answers[key] }}</label>
               </div>
             </div>
+
           </p-card>
         </div>
-        
-        <div class="flex justify-content-center mt-4">
+
+        <div class="flex justify-content-center mt-4" *ngIf="!submitted">
           <p-button type="submit" label="Soumettre" [disabled]="questions.length === 0"></p-button>
         </div>
+
+        <!-- Résultat final -->
+<div *ngIf="submitted" class="result-container">
+  <span class="final-score">Score final : {{ score }}/{{ questions.length }}</span>
+  <button pButton type="button" label="Nouveau quiz" (click)="restartQuiz()" class="new-quiz-button"></button>
+</div>
+
       </form>
     </p-card>
   </div>
-  
+
   <app-footer></app-footer>
 </div>

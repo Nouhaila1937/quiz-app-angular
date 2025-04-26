@@ -55,3 +55,75 @@ h3 {
     padding: 1rem;
   }
 }
+
+:host ::ng-deep .correct-card .p-card-body {
+  background-color: #d1fae5; /* vert clair */
+  border: 2px solid #10b981; /* vert */
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+:host ::ng-deep .incorrect-card .p-card-body {
+  background-color: #fee2e2; /* rouge clair */
+  border: 2px solid #ef4444; /* rouge */
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.result-container {
+  margin-top: 20px;
+  padding: 15px 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+
+.final-score {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.new-quiz-button {
+  background-color: #1d4ed8;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Conteneur pour catégorie + nombre de questions */
+.category-question-container {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 7px 10px rgba(0, 0, 0, 0.05);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 4rem;
+  margin-bottom: 2rem; 
+}
+
+/* Style interne des champs */
+.category-question-container .field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label stylé */
+.category-question-container label {
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #475569;
+}
+
+/* Texte du nombre de questions */
+.category-question-container .questions-count {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  color: #1e293b;
+}

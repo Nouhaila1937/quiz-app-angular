@@ -9,7 +9,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-
+import { SliderModule } from 'primeng/slider';
 @Component({
   selector: 'app-quiz',
   standalone: true,
@@ -22,7 +22,8 @@ import { FooterComponent } from '../../components/footer/footer.component';
     DropdownModule,
     InputNumberModule,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    SliderModule
   ],
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.scss'
@@ -36,6 +37,8 @@ export class QuizComponent implements OnInit {
   ];
 
   selectedCategory: string = 'Linux';
+  score: number = 0;
+  submitted: boolean = false;
   numQuestions: number = 5;
   questions: Question[] = [];
   answers: string[] = [];
@@ -49,54 +52,39 @@ export class QuizComponent implements OnInit {
     this.loadQuestions();
   }
 
-  loadQuestions(): void {
+  loadQuestions() {
     this.loading = true;
-    this.error = null;
-    this.answers = [];
+    this.error = '';
     
-    console.log(`Loading questions for ${this.selectedCategory}, limit: ${this.numQuestions}`);
-    
-    this.quizService.getQuestions(this.selectedCategory, this.numQuestions)
-      .subscribe({
-        next: (data: Question[]) => {
-          this.responseData = data; // Store the entire response for debugging
-          console.log('Response data:', data);
-          
-          if (Array.isArray(data) && data.length > 0) {
-            this.questions = data;
-            this.answers = Array(this.questions.length).fill('');
-            console.log('Questions loaded:', this.questions);
-          } else {
-            this.error = "Aucune question disponible pour cette catégorie";
-            console.error('Empty or invalid response format:', data);
-          }
-          
-          this.loading = false;
-        },
-        error: (err) => {
-          this.error = "Impossible de charger les questions. Veuillez réessayer plus tard.";
-          console.error('Error details:', err);
-          this.loading = false;
-        }
-      });
-  }
-
-  onSubmit(): void {
-    let score = 0;
-    let total = this.questions.length;
-    
-    this.questions.forEach((question, index) => {
-      const selectedAnswer = this.answers[index];
-      
-      if (selectedAnswer && question.correct_answers) {
-        const correctKey = `${selectedAnswer}_correct`;
-        if (question.correct_answers[correctKey] === 'true') {
-          score++;
-        }
+    this.quizService.getQuestions(this.selectedCategory, this.numQuestions).subscribe({
+      next: (questions) => {
+        this.questions = questions;
+        this.answers = new Array(questions.length).fill('');
+        this.loading = false;
+        this.submitted = false;
+      },
+      error: (error) => {
+        this.error = 'Erreur lors du chargement des questions.';
+        this.loading = false;
       }
     });
-    
-    alert(`Votre score : ${score} / ${total}`);
+  }
+  
+  onSubmit() {
+    this.score = 0;
+    this.submitted = true;
+  
+    this.questions.forEach((question, index) => {
+      if (this.answers[index] === question.correct_answer) {
+        this.score++;
+      }
+    });
+  }
+  restartQuiz() {
+    this.submitted = false;
+    this.score = 0;
+    this.answers = [];
+    // Recharge ou réinitialise tes questions ici si besoin
   }
   
   // Helper method pour accéder aux propriétés de l'objet answers
