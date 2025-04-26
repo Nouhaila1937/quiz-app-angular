@@ -55,5 +55,23 @@ ng e2e
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
 ## Additional Resources
+take your api token from here : 
+```link 
+https://quizapi.io/clientarea/settings/token
+```
+to run the app quiz 
+```bash
+cd quiz-app
+python -m venv venv
+source venv/bin/activate  # (ou venv\Scripts\activate sur Windows)
+pip install fastapi uvicorn
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+uvicorn backend:app --reload
+pip install streamlit requests
+streamlit run app.py
+
+```
+to access to the app and try it 
+``` bash
+http://localhost:8501/
+```
