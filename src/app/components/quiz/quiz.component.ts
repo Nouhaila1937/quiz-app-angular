@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
+
 @Component({
   selector: 'app-quiz',
-  
+  standalone: true, // Ajout de standalone: true
   imports: [
-   CommonModule,
+    CommonModule,
     FormsModule,
     RadioButtonModule,
     ButtonModule
@@ -16,13 +17,13 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './quiz.component.html',
   styleUrl: './quiz.component.scss'
 })
-export class QuizComponent implements OnInit{
+export class QuizComponent implements OnInit {
   categories = [  
     "Linux", "BASH", "PHP", "Docker", "HTML", "Postgres", "MySQL",
     "Laravel", "Kubernetes", "JavaScript", "Python", "Openshift",
     "Terraform", "React", "Django", "cPanel", "Ubuntu", "nodeJS",
     "WordPress", "Next.js", "VueJS", "Apache Kafka"
-  ]; // Liste des catégories
+  ];
 
   selectedCategory: string = 'Linux';
   numQuestions: number = 5;
@@ -46,10 +47,10 @@ export class QuizComponent implements OnInit{
     let score = 0;
     this.questions.forEach((question, index) => {
       const correctAnswerKey = Object.keys(question.correct_answers).find(key => question.correct_answers[key] === 'true');
-      if (this.answers[`${index}`] === correctAnswerKey) {
+      if (this.answers[index] === correctAnswerKey) {
         score++;
       }
     });
     alert(`Votre score : ${score} / ${this.questions.length}`);
   }
-} 
+}

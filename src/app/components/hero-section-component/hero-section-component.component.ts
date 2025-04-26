@@ -3,6 +3,7 @@ import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-hero-section-component',
+  standalone: true, // Ajout de standalone: true
   imports: [
     ButtonModule,
     RouterLink

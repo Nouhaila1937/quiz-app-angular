@@ -17,7 +17,7 @@
     <div *ngFor="let question of questions; let i = index">
       <fieldset>
         <legend>{{ question.question }}</legend>
-        <div *ngFor="let option of ['a', 'b', 'c', 'd', 'e', 'f']">
+        <div *ngFor="let option of ['a', 'b', 'c', 'd']">
           <label>
             <input type="radio" name="q{{ i }}" [(ngModel)]="answers[i]" [value]="'answer_' + option">
             {{ question.answers['answer_' + option] }}

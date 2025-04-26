@@ -5,7 +5,7 @@ import { QuizComponent } from './components/quiz/quiz.component';
 export const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full' },
   {path:'home', component: HomeComponent },
-  {path:'quiz', component: QuizComponent },
+  {path:'quiz', component: QuizComponent, pathMatch: 'full' }, // Ajout de pathMatch: 'full'
   {path:'contact' ,component:ContactComponent}
 
 ];
