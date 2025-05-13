@@ -1,70 +1,42 @@
-<div class="head">
-  <h1>Contactez-nous</h1>
-  <p>Vous avez une question? N'hésitez pas à nous contacter.</p>
+
+  <div class="head">
+    <h1>Contactez-nous</h1>
+    <p>Vous avez une question? N'hésitez pas à nous contacter.</p>
+  </div>
+
+   <p-toast></p-toast>
+
+<div class="contact-container">
+  <div class="form-card">
+    <div class="card-title">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0d47a1" class="bi bi-chat-left" viewBox="0 0 16 16">
+        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+      </svg>
+      <h2>Envoyez-nous un message</h2>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Nom</label>
+      <input type="text" id="name" [(ngModel)]="form.name" placeholder="Votre nom" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" [(ngModel)]="form.email" placeholder="Votre email" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="sujet">Sujet</label>
+      <input type="text" id="sujet" [(ngModel)]="form.sujet" placeholder="Objet de votre message" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="message">Message</label>
+      <textarea id="message" [(ngModel)]="form.message" placeholder="Votre message" class="form-control message-area"></textarea>
+    </div>
+
+  <div class="form-group">
+      <p-button label="Envoyer" icon="pi pi-send" (click)="send()" [loading]="loading" styleClass="p-button-success w-full"></p-button>
+    </div>
+  </div>
 </div>
-
-<!-- <div class="mb-4 p-8 flex flex-wrap justify-center items-end gap-4">
-  <p-card [style]="{ width: '40rem', overflow: 'hidden' }">
-    <ng-template pTemplate="title">
-      Envoyez-nous un message
-    </ng-template>
-
-    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-      <p-floatlabel class="mb-4">
-        <input pInputText id="nom" formControlName="nom" class="w-full custom-input" autocomplete="off" />
-        <label for="nom">Nom</label>
-        <small *ngIf="contactForm.get('nom')?.invalid && contactForm.get('nom')?.touched" class="p-error block mt-1">
-          Le nom est requis
-        </small>
-      </p-floatlabel>
-
-      <p-floatlabel class="mb-4">
-        <input pInputText id="email" formControlName="email" class="w-full custom-input" autocomplete="off" />
-        <label for="email">Email</label>
-        <small *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched" class="p-error block mt-1">
-          Veuillez saisir une adresse email valide
-        </small>
-      </p-floatlabel>
-
-      <p-floatlabel class="mb-4">
-        <input pInputText id="sujet" formControlName="sujet" class="w-full custom-input" autocomplete="off" />
-        <label for="sujet">Objet</label>
-        <small *ngIf="contactForm.get('sujet')?.invalid && contactForm.get('sujet')?.touched" class="p-error block mt-1">
-          L'objet est requis
-        </small>
-      </p-floatlabel>
-
-      <p-floatlabel class="mb-4">
-        <textarea pTextarea id="message" formControlName="message" rows="5" cols="30" style="resize: none" class="h-full w-full"></textarea>
-        <label for="message">Message</label>
-        <small *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched" class="p-error block mt-1">
-          Le message doit contenir au moins 10 caractères
-        </small>
-      </p-floatlabel>
-
-      <div class="flex gap-4 mt-4">
-        <p-button type="submit" label="Envoyer le message" icon="pi pi-send" [loading]="loading" styleClass="p-button-success"></p-button>
-      </div>
-    </form>
-
-    <ng-template pTemplate="footer">
-      <small class="text-gray-500">
-        Nous vous répondrons dans les plus brefs délais.
-      </small>
-    </ng-template>
-  </p-card>
-</div>
-  -->
-
-<div>
-  <input type="text" placeholder="Name" [(ngModel)]="form.name"/>
-  <br />
-  <input type="text" placeholder="Email" [(ngModel)]="form.email"/>
-  <br />
-  <input type="text" placeholder="Sujet" [(ngModel)]="form.sujet"/>
-  <br />
-  <textarea type="text" placeholder="Message" [(ngModel)]="form.message"></textarea>
-  <br />
-  <button (click)="send()">Send</button>
-</div>
-

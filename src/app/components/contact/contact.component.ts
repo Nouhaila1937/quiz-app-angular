@@ -1,13 +1,11 @@
 import { Component, signal } from '@angular/core'; 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { Message } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
-import { FormsModule } from '@angular/forms';
-import { FloatLabel } from 'primeng/floatlabel'; 
-import { Toast } from 'primeng/toast';
+import { FormsModule } from '@angular/forms'; 
 import { MessageService } from 'primeng/api';
 import emailjs, { type EmailJSResponseStatus } from '@emailjs/browser';
+import { Toast } from 'primeng/toast';
 interface ContactForm {
   name: string;
   email: string;
@@ -21,10 +19,8 @@ interface ContactForm {
   imports: [
     CardModule,
     ButtonModule,
-    Message,
     FormsModule,
-    TextareaModule,
-    FloatLabel,
+    TextareaModule, 
     Toast
   ],
   providers: [MessageService],
@@ -32,7 +28,7 @@ interface ContactForm {
   styleUrl: './contact.component.scss'
 })
 export class ContactComponent {
- 
+ loading = false;
   form: ContactForm={
     name: '',
     email: '',
@@ -41,17 +37,72 @@ export class ContactComponent {
 
   }
 
-  send():void{
-    console.log(this.form);
-    emailjs.send("service_ctsekat","template_ae5mjp5",
-      {...this.form} ,
+
+   constructor(private messageService: MessageService) {}
+
+  isFormValid(): boolean {
+    return !!this.form.name && 
+           !!this.form.email && 
+           !!this.form.sujet && 
+           !!this.form.message &&
+           this.validateEmail(this.form.email);
+  }
+
+  validateEmail(email: string): boolean {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+
+  send(): void {
+    console.log('hi')
+    if (!this.isFormValid()) {
+      console.log(' form vide')
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Veuillez remplir correctement tous les champs'
+      });
+      return;
+    }
+
+    this.loading = true;
+
+    emailjs.send(
+      "service_ctsekat", 
+      "template_ae5mjp5",
+      {
+        ...this.form
+      },
       {publicKey:'uYJUzAVQRtoQlYxgH'}
     )
-    .then(()=>{
-      console.log('message envoyé');
-    }) 
+    .then(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Succès',
+        detail: 'Votre message a été envoyé avec succès!'
+      });
+      this.resetForm();
+      this.loading = false;
+    })
+    .catch(error => {
+      console.error('Erreur lors de l\'envoi:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Une erreur est survenue lors de l\'envoi du message.'
+      });
+      this.loading = false;
+    });
   }
-  //  constructor(private messageService: MessageService) {}
+
+  resetForm(): void {
+    this.form = {
+      name: '',
+      email: '',
+      message: '',
+      sujet: '',
+    };
+  }
 
   //   showSuccess() {
   //       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
