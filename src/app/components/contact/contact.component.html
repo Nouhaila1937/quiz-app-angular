@@ -1,1 +1,70 @@
-<p>contact works!</p>
+<div class="head">
+  <h1>Contactez-nous</h1>
+  <p>Vous avez une question? N'hésitez pas à nous contacter.</p>
+</div>
+
+<!-- <div class="mb-4 p-8 flex flex-wrap justify-center items-end gap-4">
+  <p-card [style]="{ width: '40rem', overflow: 'hidden' }">
+    <ng-template pTemplate="title">
+      Envoyez-nous un message
+    </ng-template>
+
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+      <p-floatlabel class="mb-4">
+        <input pInputText id="nom" formControlName="nom" class="w-full custom-input" autocomplete="off" />
+        <label for="nom">Nom</label>
+        <small *ngIf="contactForm.get('nom')?.invalid && contactForm.get('nom')?.touched" class="p-error block mt-1">
+          Le nom est requis
+        </small>
+      </p-floatlabel>
+
+      <p-floatlabel class="mb-4">
+        <input pInputText id="email" formControlName="email" class="w-full custom-input" autocomplete="off" />
+        <label for="email">Email</label>
+        <small *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched" class="p-error block mt-1">
+          Veuillez saisir une adresse email valide
+        </small>
+      </p-floatlabel>
+
+      <p-floatlabel class="mb-4">
+        <input pInputText id="sujet" formControlName="sujet" class="w-full custom-input" autocomplete="off" />
+        <label for="sujet">Objet</label>
+        <small *ngIf="contactForm.get('sujet')?.invalid && contactForm.get('sujet')?.touched" class="p-error block mt-1">
+          L'objet est requis
+        </small>
+      </p-floatlabel>
+
+      <p-floatlabel class="mb-4">
+        <textarea pTextarea id="message" formControlName="message" rows="5" cols="30" style="resize: none" class="h-full w-full"></textarea>
+        <label for="message">Message</label>
+        <small *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched" class="p-error block mt-1">
+          Le message doit contenir au moins 10 caractères
+        </small>
+      </p-floatlabel>
+
+      <div class="flex gap-4 mt-4">
+        <p-button type="submit" label="Envoyer le message" icon="pi pi-send" [loading]="loading" styleClass="p-button-success"></p-button>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <small class="text-gray-500">
+        Nous vous répondrons dans les plus brefs délais.
+      </small>
+    </ng-template>
+  </p-card>
+</div>
+  -->
+
+<div>
+  <input type="text" placeholder="Name" [(ngModel)]="form.name"/>
+  <br />
+  <input type="text" placeholder="Email" [(ngModel)]="form.email"/>
+  <br />
+  <input type="text" placeholder="Sujet" [(ngModel)]="form.sujet"/>
+  <br />
+  <textarea type="text" placeholder="Message" [(ngModel)]="form.message"></textarea>
+  <br />
+  <button (click)="send()">Send</button>
+</div>
+
