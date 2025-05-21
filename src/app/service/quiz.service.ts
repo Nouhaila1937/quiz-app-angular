@@ -44,21 +44,40 @@ export class QuizService {
     return this.http
       .get<Question[]>(this.apiUrl, { params })
       .pipe(
+        map(response => {
+          // Transformer chaque question pour identifier la réponse correcte
+          return Array.isArray(response) ? response.map(question => {
+            // Trouver quelle est la réponse correcte
+            if (!question.correct_answer) {
+              question.correct_answer = this.determineCorrectAnswer(question.correct_answers);
+            }
+            return question;
+          }) : [];
+        }),
         tap(response => {
-          console.log('API Response:', response);
+          console.log('Processed Questions:', response);
         }),
         catchError(error => {
-          // Log plus détaillé de l'erreur
           console.error('Error fetching questions:', error);
           if (error.error instanceof ErrorEvent) {
-            // Erreur client-side
             console.error('Client-side error:', error.error.message);
           } else {
-            // Erreur server-side
             console.error(`Server returned code: ${error.status}, body: ${JSON.stringify(error.error)}`);
           }
           return throwError(() => new Error('Erreur lors du chargement des questions'));
         })
       );
+  }
+
+  // Fonction pour déterminer quelle réponse est correcte
+  determineCorrectAnswer(correctAnswers: { [key: string]: string }): string {
+    // Recherche la clé correspondant à la réponse correcte (valeur "true")
+    for (const [key, value] of Object.entries(correctAnswers)) {
+      if (value === 'true') {
+        // Convertit "answer_a_correct" en "answer_a"
+        return key.replace('_correct', '');
+      }
+    }
+    return '';
   }
 }

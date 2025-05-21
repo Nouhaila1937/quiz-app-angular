@@ -10,6 +10,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { SliderModule } from 'primeng/slider';
+
 @Component({
   selector: 'app-quiz',
   standalone: true,
@@ -29,8 +30,8 @@ import { SliderModule } from 'primeng/slider';
   styleUrl: './quiz.component.scss'
 })
 export class QuizComponent implements OnInit {
-  categories = [  
-    "Linux", "BASH", "PHP", "Docker", "HTML", "Postgres", "MySQL",
+  categories = [
+      "Linux", "BASH", "PHP", "Docker", "HTML", "Postgres", "MySQL",
     "Laravel", "Kubernetes", "JavaScript", "Openshift",
     "Terraform", "React", "Django", "cPanel", "Ubuntu", "nodeJS",
     "WordPress", "Next.js", "VueJS", "Apache Kafka"
@@ -75,25 +76,28 @@ export class QuizComponent implements OnInit {
     this.submitted = true;
   
     this.questions.forEach((question, index) => {
-      if (this.answers[index] === question.correct_answer) {
+      // Vérification si la réponse de l'utilisateur correspond à la réponse correcte
+      if (this.answers[index] && question.correct_answer && 
+          this.answers[index] === question.correct_answer) {
         this.score++;
       }
     });
   }
+
   restartQuiz() {
     this.submitted = false;
     this.score = 0;
     this.answers = [];
-    // Recharge ou réinitialise tes questions ici si besoin
+    this.loadQuestions(); // Recharge les questions pour un nouveau quiz
   }
-  
+
   // Helper method pour accéder aux propriétés de l'objet answers
   getObjectKeys(obj: any): string[] {
     if (!obj) return [];
     
     // Ne prendre que les clés qui ont des valeurs non nulles
     return Object.keys(obj).filter(key => 
-      obj[key] !== null && 
+      obj[key] !== null &&
       !key.includes('_correct') // Exclure les clés de réponses correctes
     );
   }
